@@ -17,9 +17,9 @@ type AuthenticationLogin struct {
 	Validate        *validator.Validate
 }
 
-func NewAuthenticationLogin(usersRepository repository.UserRepository, validate *validator.Validate) AuthenticationService {
+func NewAuthenticationLogin(users repository.UserRepository, validate *validator.Validate) AuthenticationService {
 	return &AuthenticationLogin{
-		UsersRepository: usersRepository,
+		UsersRepository: users,
 		Validate:        validate,
 	}
 }
