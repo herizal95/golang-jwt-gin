@@ -57,7 +57,13 @@ func (ctx *UserRepositoryImpl) FindByUsername(username string) (models.Users, er
 
 // Save implements UserRepository
 func (ctx *UserRepositoryImpl) Save(users models.Users) {
-	result := ctx.Db.Create(&users)
+	data := models.Users{
+		Id:       uuid.New(),
+		Username: users.Username,
+		Email:    users.Email,
+		Password: users.Password,
+	}
+	result := ctx.Db.Create(&data)
 	helper.ErrorPanic(result.Error)
 }
 

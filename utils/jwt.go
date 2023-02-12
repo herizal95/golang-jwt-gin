@@ -21,7 +21,7 @@ func GenerateToken(ttl time.Duration, payload interface{}, secretJWTKey string) 
 	tokanstring, err := token.SignedString([]byte(secretJWTKey))
 
 	if err != nil {
-		return "", fmt.Errorf("genereting JWT token failed: %w", err)
+		return "", fmt.Errorf("genereting JWT token failed %w", err)
 	}
 
 	return tokanstring, err
