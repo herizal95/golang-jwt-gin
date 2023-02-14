@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"github.com/herizal95/golang-jwt-gin/config"
 	"github.com/herizal95/golang-jwt-gin/data/request"
 	"github.com/herizal95/golang-jwt-gin/helper"
@@ -53,6 +54,7 @@ func (a *AuthenticationLogin) Register(users request.CreateUserRequest) {
 	helper.ErrorPanic(err)
 
 	newUsers := models.Users{
+		Id:       uuid.New(),
 		Username: users.Username,
 		Email:    users.Email,
 		Password: hashedPassword,
