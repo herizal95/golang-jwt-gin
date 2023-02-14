@@ -34,7 +34,7 @@ func (ctx *UserRepositoryImpl) FindAll() []models.Users {
 }
 
 // FindById implements UserRepository
-func (ctx *UserRepositoryImpl) FindById(usersId uuid.UUID) (models.Users, error) {
+func (ctx *UserRepositoryImpl) FindById(usersId string) (models.Users, error) {
 	var users models.Users
 	result := ctx.Db.Find(&users, usersId)
 	if result != nil {

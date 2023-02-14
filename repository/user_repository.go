@@ -9,7 +9,7 @@ type UserRepository interface {
 	Save(users models.Users)
 	Update(users models.Users)
 	Delete(usersId uuid.UUID)
-	FindById(usersId uuid.UUID) (models.Users, error)
+	FindById(usersId string) (models.Users, error)
 	FindAll() []models.Users
 	FindByUsername(username string) (models.Users, error)
 }
