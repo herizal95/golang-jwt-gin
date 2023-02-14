@@ -5,9 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/herizal95/golang-jwt-gin/controllers"
+	"github.com/herizal95/golang-jwt-gin/middleware"
+	"github.com/herizal95/golang-jwt-gin/repository"
 )
 
-func NewRouter(authControllers *controllers.AuthenticationController) *gin.Engine {
+func NewRouter(userRepository repository.UserRepository, authControllers *controllers.AuthenticationController, userController *controllers.UserController) *gin.Engine {
 	service := gin.Default()
 
 	service.GET("", func(ctx *gin.Context) {
@@ -16,9 +18,12 @@ func NewRouter(authControllers *controllers.AuthenticationController) *gin.Engin
 
 	router := service.Group("/api")
 
-	authRouter := router.Group("/auth")
-	authRouter.POST("/register", authControllers.Register)
-	authRouter.POST("/login", authControllers.Login)
+	authenticationRouter := router.Group("/auth")
+	authenticationRouter.POST("/register", authControllers.Register)
+	authenticationRouter.POST("/login", authControllers.Login)
+
+	usersRouter := router.Group("/users")
+	usersRouter.GET("", middleware.DeserializerUser(userRepository), userController.GetUsers)
 
 	return service
 }

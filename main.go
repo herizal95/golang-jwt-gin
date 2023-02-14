@@ -35,8 +35,9 @@ func main() {
 
 	// Init Controller
 	authenticationControllers := controllers.NewAuthenticationController(authenticationService)
+	userController := controllers.NewUserController(usersRepository)
 
-	routes := router.NewRouter(authenticationControllers)
+	routes := router.NewRouter(usersRepository, authenticationControllers, userController)
 
 	server := &http.Server{
 		Addr:    ":8080",
