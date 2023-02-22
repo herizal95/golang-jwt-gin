@@ -24,6 +24,7 @@ func NewRouter(userRepository repository.UserRepository, authControllers *contro
 
 	usersRouter := router.Group("/users")
 	usersRouter.GET("", middleware.DeserializerUser(userRepository), userController.GetUsers)
+	usersRouter.GET("/:id", middleware.DeserializerUser(userRepository), userController.GetUsersById)
 
 	return service
 }

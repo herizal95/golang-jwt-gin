@@ -36,12 +36,12 @@ func (ctx *UserRepositoryImpl) FindAll() []models.Users {
 // FindById implements UserRepository
 func (ctx *UserRepositoryImpl) FindById(usersId string) (models.Users, error) {
 	var users models.Users
-	result := ctx.Db.Find(&users, usersId)
-	if result != nil {
-		return users, nil
-	} else {
-		return users, errors.New("users is not found")
+	result := ctx.Db.Raw("SELECT * FROM users WHERE id = ?", usersId).Scan(&users)
+	if result.Error != nil {
+		return users, result.Error
 	}
+
+	return users, nil
 }
 
 // FindByUsername implements UserRepository
