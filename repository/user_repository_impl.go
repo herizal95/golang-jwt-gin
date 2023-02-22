@@ -7,6 +7,7 @@ import (
 	"github.com/herizal95/golang-jwt-gin/data/request"
 	"github.com/herizal95/golang-jwt-gin/helper"
 	"github.com/herizal95/golang-jwt-gin/models"
+	"github.com/herizal95/golang-jwt-gin/utils"
 	"gorm.io/gorm"
 )
 
@@ -16,13 +17,6 @@ type UserRepositoryImpl struct {
 
 func NewUserRepositoryImpl(Db *gorm.DB) UserRepository {
 	return &UserRepositoryImpl{Db: Db}
-}
-
-// Delete implements UserRepository
-func (ctx *UserRepositoryImpl) Delete(usersId uuid.UUID) {
-	var users models.Users
-	result := ctx.Db.Where("id = ?", usersId).Delete(&users)
-	helper.ErrorPanic(result.Error)
 }
 
 // FindAll implements UserRepository
@@ -57,11 +51,15 @@ func (ctx *UserRepositoryImpl) FindByUsername(username string) (models.Users, er
 
 // Save implements UserRepository
 func (ctx *UserRepositoryImpl) Save(users models.Users) {
+
+	hashPassword, err := utils.HashPassword(users.Password)
+	helper.ErrorPanic(err)
+
 	data := models.Users{
 		Id:       uuid.New(),
 		Username: users.Username,
 		Email:    users.Email,
-		Password: users.Password,
+		Password: hashPassword,
 	}
 	result := ctx.Db.Create(&data)
 	helper.ErrorPanic(result.Error)
@@ -69,12 +67,24 @@ func (ctx *UserRepositoryImpl) Save(users models.Users) {
 
 // Update implements UserRepository
 func (ctx *UserRepositoryImpl) Update(users models.Users) {
+
+	hashedPassword, err := utils.HashPassword(users.Password)
+	helper.ErrorPanic(err)
+
 	var UpdateUsers = request.UpdateUserRequest{
 		Id:       users.Id,
 		Username: users.Username,
 		Email:    users.Email,
-		Password: users.Password,
+		Password: hashedPassword,
 	}
 	result := ctx.Db.Model(&users).Updates(&UpdateUsers)
 	helper.ErrorPanic(result.Error)
+}
+
+// Delete implements UserRepository
+func (ctx *UserRepositoryImpl) Delete(usersId string) (models.Users, error) {
+	var users models.Users
+	result := ctx.Db.Where("id = ?", usersId).Delete(&users)
+	helper.ErrorPanic(result.Error)
+	return users, nil
 }
