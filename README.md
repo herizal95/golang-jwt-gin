@@ -1,1 +1,1 @@
-# golang-jwt-gin
+# JWT Middleware use Gin-gonic framework
