@@ -1,4 +1,4 @@
 # JWT Middleware use Gin-gonic framework
-This is example implement JWT Middleware using Golang and Gin framework
+Ini adalah contoh implementasi JSON Web Token (JWT) pada aplikasi Golang menggunakan framework web Gin-gonic dan middleware.
 
-$ Usage
+# Instalasi
