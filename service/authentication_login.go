@@ -31,14 +31,14 @@ func (a *AuthenticationLogin) Login(users request.LoginRequest) (string, error) 
 	// Find username in database
 	new_user, user_err := a.UsersRepository.FindByUsername(users.Username)
 	if user_err != nil {
-		return "", errors.New("invalid username or password")
+		return "", errors.New("invalid username or not found in database ")
 	}
 
 	config, _ := config.LoadConfig(".")
 
 	verity_error := utils.VerifyPassword(new_user.Password, users.Password)
 	if verity_error != nil {
-		return "", errors.New("invalid username or password")
+		return "", errors.New("invalid password or not match in database")
 	}
 
 	//Generate token
@@ -59,5 +59,6 @@ func (a *AuthenticationLogin) Register(users request.CreateUserRequest) {
 		Email:    users.Email,
 		Password: hashedPassword,
 	}
+
 	a.UsersRepository.Save(newUsers)
 }
