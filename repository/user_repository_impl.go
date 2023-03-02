@@ -3,7 +3,6 @@ package repository
 import (
 	"errors"
 
-	"github.com/google/uuid"
 	"github.com/herizal95/golang-jwt-gin/data/request"
 	"github.com/herizal95/golang-jwt-gin/helper"
 	"github.com/herizal95/golang-jwt-gin/models"
@@ -51,17 +50,7 @@ func (ctx *UserRepositoryImpl) FindByUsername(username string) (models.Users, er
 
 // Save implements UserRepository
 func (ctx *UserRepositoryImpl) Save(users models.Users) {
-
-	hashPassword, err := utils.HashPassword(users.Password)
-	helper.ErrorPanic(err)
-
-	data := models.Users{
-		Id:       uuid.New(),
-		Username: users.Username,
-		Email:    users.Email,
-		Password: hashPassword,
-	}
-	result := ctx.Db.Create(&data)
+	result := ctx.Db.Create(&users)
 	helper.ErrorPanic(result.Error)
 }
 
